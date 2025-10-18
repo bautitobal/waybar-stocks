@@ -1,0 +1,16 @@
+refresh_interval: 60
+rotation_interval: 5
+format: "{symbol} {price} ({change}%{icon})"
+
+colors:
+  up: "#00FF00"
+  down: "#FF5555"
+  neutral: "#FFFFFF"
+
+assets:
+  - symbol: BTC-USD
+    name: BTC
+  - symbol: AAPL
+    name: AAPL
+  - symbol: SPY
+    name: S&P500

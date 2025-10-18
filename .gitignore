@@ -1,0 +1,30 @@
+# Binaries / compiled files
+waybar-stocks
+*.exe
+*.out
+
+# Build / cache directories
+/bin/
+/build/
+/dist/
+/target/
+/coverage/
+
+# Go module files (vendor if needed)
+/vendor/
+
+# IDE / Editor folders
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs & debug files
+*.log
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# Local configuration files
+*.local.yml
