@@ -14,3 +14,7 @@ assets:
     name: AAPL
   - symbol: SPY
     name: S&P500
+  - symbol: dolar-oficial
+    name: DÓLAR OFICIAL
+  - symbol: dolar-cripto
+    name: DÓLAR CRIPTO

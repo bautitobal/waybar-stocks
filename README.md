@@ -5,7 +5,7 @@ Supports price rotation, percent change indicators, custom colors, and YAML conf
 
 ## Features
 
-- Display stock, crypto, or index prices (e.g. `BTC-USD` (or `bitcoin` like CoinGecko's naming), `AAPL`, `SPY`, `^GSPC`)
+- Display stock, crypto, or index prices (e.g. `BTC-USD` (or `bitcoin` like CoinGecko's naming), `AAPL`, `SPY`, `^GSPC`), and Argentinian Dólar prices (`dolar-oficial`, `dolar-blue`, `dolar-cripto`, etc.).
 - Shows **price + percent change + up/down icons** for each asset.
 - Configurable via [`config.yml`](/config.yml).
   - Supports **color customization**
@@ -60,6 +60,10 @@ assets:
     name: AAPL
   - symbol: SPY
     name: S&P500
+  - symbol: dolar-oficial
+    name: DÓLAR OFICIAL
+  - symbol: dolar-cripto
+    name: DÓLAR CRIPTO
 ```
 
 ## Add to Waybar
