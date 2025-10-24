@@ -42,14 +42,91 @@ func getYahoo(symbol string) (*Quote, error) {
 		return nil, fmt.Errorf("error parsing Yahoo JSON: %v", err)
 	}
 
-	chart := data["chart"].(map[string]interface{})
-	results := chart["result"].([]interface{})
-	if len(results) == 0 {
+	chart, ok := data["chart"].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("invalid JSON structure (chart) for %s", symbol)
+	}
+	results, ok := chart["result"].([]interface{})
+	if !ok || len(results) == 0 {
 		return nil, fmt.Errorf("no results for %s", symbol)
 	}
-	meta := results[0].(map[string]interface{})["meta"].(map[string]interface{})
-	price := meta["regularMarketPrice"].(float64)
-	change, _ := meta["regularMarketChangePercent"].(float64)
+
+	res0, ok := results[0].(map[string]interface{})
+	if !ok {
+		return nil, fmt.Errorf("invalid result structure for %s", symbol)
+	}
+
+	meta, _ := res0["meta"].(map[string]interface{})
+
+	// Try to get price from meta, fallback to indicators.quote.close last value
+	var price float64
+	if meta != nil {
+		if p, ok := meta["regularMarketPrice"].(float64); ok {
+			price = p
+		}
+	}
+	if price == 0 {
+		if indicators, ok := res0["indicators"].(map[string]interface{}); ok {
+			if quoteArr, ok := indicators["quote"].([]interface{}); ok && len(quoteArr) > 0 {
+				if quote, ok := quoteArr[0].(map[string]interface{}); ok {
+					if closes, ok := quote["close"].([]interface{}); ok {
+						for i := len(closes) - 1; i >= 0; i-- {
+							if closes[i] != nil {
+								if p, ok := closes[i].(float64); ok {
+									price = p
+									break
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	if price == 0 {
+		return nil, fmt.Errorf("could not determine price for %s", symbol)
+	}
+
+	// Try to get percent change from meta, otherwise compute from previous close (several fallbacks)
+	var change float64
+	if meta != nil {
+		if v, ok := meta["regularMarketChangePercent"].(float64); ok {
+			change = v
+		} else if prev, ok := meta["previousClose"].(float64); ok && prev != 0 {
+			change = (price - prev) / prev * 100
+		} else if prev, ok := meta["chartPreviousClose"].(float64); ok && prev != 0 {
+			change = (price - prev) / prev * 100
+		}
+	}
+
+	// If still zero/unknown, try to compute from last two closes in indicators
+	if change == 0 {
+		if indicators, ok := res0["indicators"].(map[string]interface{}); ok {
+			if quoteArr, ok := indicators["quote"].([]interface{}); ok && len(quoteArr) > 0 {
+				if quote, ok := quoteArr[0].(map[string]interface{}); ok {
+					if closes, ok := quote["close"].([]interface{}); ok {
+						var last, prevVal float64
+						found := 0
+						for i := len(closes) - 1; i >= 0 && found < 2; i-- {
+							if closes[i] != nil {
+								if v, ok := closes[i].(float64); ok {
+									if found == 0 {
+										last = v
+									} else {
+										prevVal = v
+									}
+									found++
+								}
+							}
+						}
+						if found >= 2 && prevVal != 0 {
+							change = (last - prevVal) / prevVal * 100
+						}
+					}
+				}
+			}
+		}
+	}
 
 	return &Quote{Symbol: symbol, Price: price, Change: change}, nil
 }
