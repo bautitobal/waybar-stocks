@@ -14,7 +14,16 @@ and this project adheres to **Semantic Versioning**.
 
 ---
 
-## [v0.1.5] - 2024-01-??
+## [v0.2.0] - 2025-10-24
+### Fixed
+- fix(fetcher): correctly compute percent change for stocks
+  - Use `regularMarketChangePercent` from Yahoo `meta` when available.
+  - Fallbacks: compute from `previousClose` or `chartPreviousClose` if present.
+  - Last-resort fallback: compute percent from the last two non-nil `close` values in `indicators.quote`.
+  - Improved price extraction: prefer `regularMarketPrice`, otherwise use the last non-nil `close` from `indicators`.
+  - Modified file: `internal/fetcher/fetcher.go`
+
+## [v0.1.5] - 2025-10-18
 ### Added
 - Initial release of **waybar-stocks**.
 - Displays stock, crypto, and ETF prices in Waybar.
