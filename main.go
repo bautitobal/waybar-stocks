@@ -14,7 +14,7 @@ import (
 
 // CLI help / usage message
 func printHelp() {
-	fmt.Println(`waybar-stocks - Custom Waybar module for displaying stock and cryptocurrency prices.
+	fmt.Print(`waybar-stocks - Custom Waybar module for displaying stock and cryptocurrency prices.
 
 USAGE:
   waybar-stocks [options]
@@ -24,10 +24,10 @@ OPTIONS:
   --help             Show this help message and exit
 
 EXAMPLE:
-  waybar-stocks --config ~/.config/waybar/config.yml
+  waybar-stocks --config ~/.config/waybar/config.yml (if exists)
 
 This program prints a JSON object to stdout that Waybar can render, for example:
-  {"text": "<span color='#00FF00'>BTC 107000.00 (1.25%▲)</span>"}
+  {"text": "<span color='#00FF00'>BTC (1D) 107000.00 (1.25%▲)</span>"}
 `)
 }
 
