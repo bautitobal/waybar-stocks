@@ -61,7 +61,7 @@ func main() {
 	asset := cfg.Assets[index]
 
 	// Fetch quote
-	q, err := fetcher.GetQuote(asset.Symbol)
+	q, err := fetcher.GetQuote(asset.Symbol, asset.Timeframe)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error fetching %s: %v\n", asset.Symbol, err)
 		os.Exit(1)
@@ -71,6 +71,7 @@ func main() {
 	text := formatter.FormatText(
 		cfg.Format,
 		asset.Name,
+		asset.Timeframe,
 		q.Price,
 		q.Change,
 		cfg.Colors.Up,

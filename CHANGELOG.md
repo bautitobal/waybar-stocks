@@ -11,8 +11,26 @@ and this project adheres to **Semantic Versioning**.
 - (Planned) Configurable decimal precision.
 - (Planned) Cache system to reduce API calls.
 - (Planned) Finnhub/AlphaVantage API support as alternative to Yahoo.
+- (Planned) Alerting/notifications for significant price changes.
+- (Planned) Alerts configuration in `config.yml` for threshold-based notifications.
+- (Planned) WebSocket support for real-time updates.
 
 ---
+
+## [v0.6.0] - 2025-10-28
+### Added (timeframe support)
+- Per-asset `timeframe` option in `config.yml` to control which period the percent change is computed for (examples: `15m`, `1H`, `1D`, `3D`, `1W`, `1M`, `1Y`).
+- Formatter token `{timeframe}` available in `format`; if omitted from `format`, timeframe will be appended to the symbol automatically.
+- Timeframe-aware percent calculations for stocks (Yahoo chart API) and cryptos (CoinGecko market_chart) when a custom timeframe is requested.
+
+### Changed
+- Updated `internal/config/config.go` to add the optional `timeframe` field for assets.
+- Updated `internal/formatter/formatter.go` to accept and render the `{timeframe}` token (and append timeframe to the symbol when the token is not present).
+- Updated `internal/fetcher/fetcher.go` to support timeframe-aware fetching for stocks and cryptos, and to integrate DolarApi with a persistent cache for `dolar-*` symbols.
+
+### Fixed
+- fix(fetcher): compute percent change for Dólar quotes using the last saved value persisted in cache (shows % relative to previous run).
+- fix(fetcher): improved stock percent change fallbacks and price extraction from Yahoo (`regularMarketChangePercent`, `previousClose`, `chartPreviousClose`, last non-nil closes).
 
 ## [v0.4.0] - 2025-10-24
 ### Added

@@ -2,12 +2,15 @@ package config
 
 import (
 	"os"
+
 	"gopkg.in/yaml.v3"
 )
 
 type Asset struct {
 	Symbol string `yaml:"symbol"`
 	Name   string `yaml:"name"`
+	// optional timeframe for percent change (e.g. "1D", "3D", "1W", "1M", "1Y", "15m")
+	Timeframe string `yaml:"timeframe,omitempty"`
 }
 
 type Colors struct {
@@ -17,11 +20,11 @@ type Colors struct {
 }
 
 type Config struct {
-	RefreshInterval  int      `yaml:"refresh_interval"`
-	RotationInterval int      `yaml:"rotation_interval"`
-	Format           string   `yaml:"format"`
-	Assets           []Asset  `yaml:"assets"`
-	Colors           Colors   `yaml:"colors"`
+	RefreshInterval  int     `yaml:"refresh_interval"`
+	RotationInterval int     `yaml:"rotation_interval"`
+	Format           string  `yaml:"format"`
+	Assets           []Asset `yaml:"assets"`
+	Colors           Colors  `yaml:"colors"`
 }
 
 func LoadConfig(path string) (*Config, error) {
@@ -35,4 +38,3 @@ func LoadConfig(path string) (*Config, error) {
 	}
 	return &cfg, nil
 }
-

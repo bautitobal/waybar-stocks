@@ -11,6 +11,7 @@ Supports price rotation, percent change indicators, custom colors, and YAML conf
   - Supports **color customization**
   - Assets
   - Refresh & rotation interval!
+  - Timeframe for each stock! (see [Timeframe (per-asset)](README.md#timeframe-per-asset))
 - Fast & lightweight (native Go binary, no runtime needed)
 - Includes CLI flags like `--help` and `--config`
 - Works perfectly with **Waybar (Hyprland / Sway / niri / dwl)**
@@ -56,15 +57,40 @@ colors:
 assets:
   - symbol: BTC-USD
     name: BTC
+    timeframe: 1D
   - symbol: AAPL
     name: AAPL
+    timeframe: 1W
   - symbol: SPY
     name: S&P500
+    timeframe: 1M
   - symbol: dolar-oficial
     name: DÓLAR OFICIAL
+    timeframe: 1D
   - symbol: dolar-cripto
     name: DÓLAR CRIPTO
+    timeframe: 1D
 ```
+
+### Timeframe (per-asset)
+
+You can optionally set a `timeframe` per asset to control which period the percent change is computed for. If omitted, the default is daily (`1D`). Examples:
+
+- `15m` — 15 minutes
+- `1H` or `H` — 1 hour
+- `1D` or `D` — 1 day (default)
+- `3D` — 3 days
+- `1W` or `W` — 1 week
+- `1M` — 1 month (approximated as 30 days)
+- `1Y` or `Y` — 1 year (approximated as 365 days)
+
+Notes:
+- For stocks the fetcher will prefer Yahoo's session metadata for daily change, or request Yahoo chart data for custom timeframes and compute the percent between "now" and "timeframe ago".
+- For cryptocurrencies the fetcher uses CoinGecko's 24h percent by default; for custom timeframes it queries CoinGecko's market_chart and computes the percent accordingly.
+- For `dolar-*` symbols the app fetches the latest `venta` (or `compra`) from DolarApi and computes change relative to the last saved value (persisted in the cache). If you need percent vs a fixed period (e.g. 24h), the app can be extended to keep a longer history or use historical endpoints.
+
+You can include the `{timeframe}` token in your `format` string to show the timeframe explicitly. If `{timeframe}` is not present, the timeframe will be appended to the symbol automatically when set.
+
 
 ## Add to Waybar
 In your `~/.config/waybar/config.jsonc`, add:
@@ -104,5 +130,3 @@ If you have any questions or need help, feel free to open an issue or contact th
 Feel free to donate! (If you can afford and you want of course).
 
 [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/bautitobal) [![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/bautitobal) 
-
-

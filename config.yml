@@ -10,11 +10,16 @@ colors:
 assets:
   - symbol: BTC-USD
     name: BTC
+    timeframe: 1H
   - symbol: AAPL
     name: AAPL
+    timeframe: 1D
   - symbol: SPY
     name: S&P500
+    timeframe: 1W
   - symbol: dolar-oficial
     name: DÓLAR OFICIAL
+    timeframe: D
   - symbol: dolar-cripto
     name: DÓLAR CRIPTO
+    timeframe: 1D
